@@ -2,10 +2,10 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# === Load model and encoders ===
+# load the model
 model = joblib.load('credit_score_model.pkl')
 
-# Load label encoders for categorical variables
+# label encorders
 occupation_encoder = joblib.load('encoders/occupation_encoder.pkl')
 credit_mix_encoder = joblib.load('encoders/credit_mix_encoder.pkl')
 payment_min_encoder = joblib.load('encoders/payment_min_encoder.pkl')
@@ -37,7 +37,7 @@ payment_behaviour = st.selectbox("Payment Behaviour", payment_behaviour_encoder.
 monthly_balance = st.number_input("Monthly Balance", step=100.0)
 credit_history_age_months = st.number_input("Credit History Age (in months)", min_value=0)
 
-# ==== Assemble input data ====
+# dataframe for the input variables
 input_data = pd.DataFrame({
     'Age': [age],
     'Occupation': [occupation],
@@ -61,13 +61,13 @@ input_data = pd.DataFrame({
     'Credit_History_Age_Months': [credit_history_age_months]
 })
 
-# ==== Encode categorical features ====
+# Encode categorical features 
 input_data['Occupation'] = occupation_encoder.transform(input_data['Occupation'])
 input_data['Credit_Mix'] = credit_mix_encoder.transform(input_data['Credit_Mix'])
 input_data['Payment_of_Min_Amount'] = payment_min_encoder.transform(input_data['Payment_of_Min_Amount'])
 input_data['Payment_Behaviour'] = payment_behaviour_encoder.transform(input_data['Payment_Behaviour'])
 
-# ==== Predict ====
+# Predict
 if st.button("Predict Credit Score"):
     prediction = model.predict(input_data)
     st.success(f"Predicted Credit Score: **{prediction[0]}**")
