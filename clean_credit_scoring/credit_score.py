@@ -33,7 +33,6 @@ payment_behaviour = st.selectbox("Payment Behaviour", ['Low_spent_Large_value_pa
 monthly_balance = st.number_input("Monthly Balance", step=100.0)
 credit_history_age_months = st.number_input("Credit History Age (in months)", min_value=0)
 
-# ==== Create input DataFrame ====
 input_data = pd.DataFrame({
     'Age': [age],
     'Occupation': [occupation],
@@ -57,12 +56,7 @@ input_data = pd.DataFrame({
     'Credit_History_Age_Months': [credit_history_age_months]
 })
 
-# ==== Preprocessing (must match your training pipeline) ====
-# - Apply one-hot encoding, scaling, etc., same as during training
-# - For demo, assume model accepts raw input_data
-# - You should replace this with actual preprocessing steps if needed
-
-# ==== Predict ====
+#predict button
 if st.button("Predict Credit Score"):
     prediction = model.predict(input_data)
     st.success(f"Predicted Credit Score: **{prediction[0]}**")
