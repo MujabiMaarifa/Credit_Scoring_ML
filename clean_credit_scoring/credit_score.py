@@ -68,6 +68,15 @@ input_data['Payment_of_Min_Amount'] = payment_min_encoder.transform(input_data['
 input_data['Payment_Behaviour'] = payment_behaviour_encoder.transform(input_data['Payment_Behaviour'])
 
 # Predict
+label_map = {
+    0: "Poor",
+    1: "Standard",
+    2: "Good"
+}
+
+# Predict
 if st.button("Predict Credit Score"):
     prediction = model.predict(input_data)
-    st.success(f"Predicted Credit Score: **{prediction[0]}**")
+    predicted_label = label_map.get(prediction[0], "Unknown")
+    st.success(f"Predicted Credit Score: **{predicted_label}**")
+
