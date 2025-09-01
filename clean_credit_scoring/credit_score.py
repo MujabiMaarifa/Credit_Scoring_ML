@@ -6,10 +6,10 @@ import joblib
 model = joblib.load('credit_score_model.pkl')
 
 # label encorders
-occupation_encoder = joblib.load('encoders/occupation_encoder.pkl')
-credit_mix_encoder = joblib.load('encoders/credit_mix_encoder.pkl')
-payment_min_encoder = joblib.load('encoders/payment_min_encoder.pkl')
-payment_behaviour_encoder = joblib.load('encoders/payment_behaviour_encoder.pkl')
+occupation_encoder = joblib.load('occupation_encoder.pkl')
+credit_mix_encoder = joblib.load('credit_mix_encoder.pkl')
+payment_min_encoder = joblib.load('payment_min_encoder.pkl')
+payment_behaviour_encoder = joblib.load('payment_behaviour_encoder.pkl')
 
 # === Streamlit UI ===
 st.title("🏦 Credit Score Prediction App")
