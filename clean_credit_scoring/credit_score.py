@@ -11,11 +11,11 @@ credit_mix_encoder = joblib.load('credit_mix_encoder.pkl')
 payment_min_encoder = joblib.load('payment_min_encoder.pkl')
 payment_behaviour_encoder = joblib.load('payment_behaviour_encoder.pkl')
 
-# === Streamlit UI ===
+# user interface
 st.title("🏦 Credit Score Prediction App")
 st.markdown("Enter customer details below to predict their credit score.")
 
-# ==== User Inputs ====
+# user input fields
 age = st.number_input("Age", min_value=18, max_value=100, step=1)
 occupation = st.selectbox("Occupation", occupation_encoder.classes_.tolist())
 annual_income = st.number_input("Annual Income", min_value=0.0, step=1000.0)
@@ -74,9 +74,17 @@ label_map = {
     2: "Good"
 }
 
+
 # Predict
 if st.button("Predict Credit Score"):
     prediction = model.predict(input_data)
     predicted_label = label_map.get(prediction[0], "Unknown")
     st.success(f"Predicted Credit Score: **{predicted_label}**")
+    if predicted_label == 0:
+        st.success("System Message: The customer cannot be accessed any credit")
+    
+    else:
+        st.success("System Message: Grant access")
+
+    
 
