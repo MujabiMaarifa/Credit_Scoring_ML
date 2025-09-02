@@ -76,15 +76,15 @@ label_map = {
 
 
 # Predict
-if st.button("Predict Credit Score"):
-    prediction = model.predict(input_data)
-    predicted_label = label_map.get(prediction[0], "Unknown")
-    st.success(f"Predicted Credit Score: **{predicted_label}**")
-    if predicted_label == 0:
-        st.success("System Message: The customer cannot be accessed any credit")
-    
-    else:
-        st.success("System Message: Grant access")
-
-    
+if __name__=="__main__":
+    if st.button("Predict Credit Score"):
+        prediction = model.predict(input_data)
+        predicted_label = label_map.get(prediction[0], "Unknown")
+        st.success(f"Predicted Credit Score: **{predicted_label}**")
+        if predicted_label == 0:
+            st.error("System Message: The customer cannot be accessed any credit")
+        elif predicted_label== 1:
+            st.success("System Message: Grant credit with standard terms.")
+        else:
+            st.success("System Message: Grant credit with favorable terms.")
 
