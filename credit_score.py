@@ -82,13 +82,18 @@ scaler = joblib.load('standard_scaler.pkl')
 model_columns = joblib.load('model_columns.pkl')  # list of columns after one-hot encoding
 
 # ==== Encode categorical variables using LabelEncoders ====
-input_data['Occupation'] = occupation_encoder.transform(input_data['Occupation'])
-input_data['Credit_Mix'] = credit_mix_encoder.transform(input_data['Credit_Mix'])
-input_data['Payment_of_Min_Amount'] = payment_min_encoder.transform(input_data['Payment_of_Min_Amount'])
-input_data['Payment_Behaviour'] = payment_behaviour_encoder.transform(input_data['Payment_Behaviour'])
+def safe_transform(encoder, column, value):
+    if value not in encoder.classes_:
+        st.error(f"The {value} is not known in '{column}'")
+        st.stop()
+    return encoder.transform([value])[0]
+input_data['Occupation'] = safe_transform(occupation_encoder, 'Occupation', input_data['Occupation'].values[0])
+input_data['Credit_Mix'] = safe_transform(credit_mix_encoder, 'Credit_Mix', input_data['Credit_Mix'])
+input_data['Payment_of_Min_Amount'] = safe_transform(payment_min_encoder, 'Payment_of_Min_AMount', input_data['Payment_of_Min_Amount'])
+input_data['Payment_Behaviour'] = safe_transform(payment_behaviour_encoder, 'Payment_Behaviour', input_data['Payment_Behaviour'])
 
-# ==== One-hot encode and align with training columns ====
-input_data = pd.get_dummies(input_data)
+# # ==== One-hot encode and align with training columns ====
+# input_data = pd.get_dummies(input_data)
 
 # Ensure input_data has the same columns and order as during training
 for col in model_columns:
@@ -103,15 +108,15 @@ input_scaled = scaler.transform(input_data)
 
 # ==== Predict ====
 if st.button("Predict Credit Score"):
-    prediction = model.predict(input_data)
+    prediction = model.predict(input_scaled)
     st.success(f"Predicted Credit Score: **{prediction[0]}**")
     if prediction == 0:
-        system_message = "Do Not Grant Loan Access"
+        system_message = "Poor Loan Status: Do Not Grant Loan Access"
         st.error(system_message)
     elif prediction == 1:
-        system_message = "Can Grant Loan But Consider the Other Factors with Caution"
+        system_message = "Good Loan Status: Grant Loan But Consider the Other Factors with Caution"
         st.success(system_message)
     else:
-        system_message = "Grant Loan"
+        system_message = "Standard Loan Status: Grant Loan"
         st.success(system_message)
 
